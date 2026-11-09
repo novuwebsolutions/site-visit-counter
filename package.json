@@ -1,0 +1,44 @@
+{
+  "name": "site-visit-counter",
+  "version": "1.0.0",
+  "description": "Count your website's visits without cookies on your own Cloudflare account: pages, sources, link tags, devices, time on page, phone and e-mail clicks, forms and videos. No IP addresses stored, nothing in the visitor's browser. Made by Novu Web Solutions, novu.ee",
+  "type": "module",
+  "main": "visit-counter.mjs",
+  "exports": {
+    ".": "./visit-counter.mjs"
+  },
+  "files": [
+    "visit-counter.mjs",
+    "worker.mjs",
+    "counter.js",
+    "dashboard.html",
+    "dashboard.js",
+    "schema.sql",
+    "wrangler.example.jsonc"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "analytics",
+    "cookieless",
+    "privacy",
+    "gdpr",
+    "cloudflare-workers",
+    "d1",
+    "estonia"
+  ],
+  "homepage": "https://github.com/novuwebsolutions/site-visit-counter",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/novuwebsolutions/site-visit-counter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/novuwebsolutions/site-visit-counter/issues"
+  },
+  "author": "Novu Web Solutions OÜ (https://novu.ee)",
+  "license": "MIT"
+}

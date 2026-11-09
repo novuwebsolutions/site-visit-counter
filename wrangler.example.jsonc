@@ -1,0 +1,32 @@
+// Copy to wrangler.jsonc, fill in database_id and the route, then: npx wrangler deploy
+{
+  "name": "site-visit-counter",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-09-16",
+  // The page script and the dashboard are served as text from the Worker itself.
+  "rules": [{ "type": "Text", "globs": ["**/counter.js", "**/dashboard.html", "**/dashboard.js"], "fallthrough": true }],
+  // Put the counter on your own site's address, so the notes go to your own domain:
+  // every request to example.com/visits/... goes to this Worker, the rest of the site is untouched.
+  // (The domain must be a zone in the same Cloudflare account.) Delete "routes" and set
+  // "workers_dev": true instead to run it on its own *.workers.dev address and list your site in
+  // ALLOWED_ORIGINS below.
+  "routes": [{ "pattern": "example.com/visits/*", "zone_name": "example.com" }],
+  "workers_dev": false,
+  // The database: npx wrangler d1 create site-visits --jurisdiction eu   (then paste its id here).
+  "d1_databases": [{ "binding": "DB", "database_name": "site-visits", "database_id": "PASTE-THE-ID-HERE" }],
+  // Notes per visitor IP per minute. A page sends a few, so this only stops someone flooding it.
+  // The id only has to be unique within your Cloudflare account.
+  "ratelimits": [{ "name": "HIT_LIMIT", "namespace_id": "3101", "simple": { "limit": 60, "period": 60 } }],
+  // Every night: fold single visits older than KEEP_DAYS into daily totals.
+  "triggers": { "crons": ["17 3 * * *"] },
+  "vars": {
+    // The site(s) allowed to send notes, comma separated. Empty: only the Worker's own address.
+    "ALLOWED_ORIGINS": "https://example.com,https://www.example.com",
+    // Days a single visit is kept before only the daily totals remain.
+    "KEEP_DAYS": "30",
+    // Which calendar the days follow (the daily key changes at this midnight).
+    "TIME_ZONE": "Europe/Tallinn",
+    "BASE_PATH": "/visits"
+  }
+  // The dashboard key is a secret, never here: npx wrangler secret put STATS_TOKEN
+}

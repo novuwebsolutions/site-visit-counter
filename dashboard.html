@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Visits</title>
+<style>
+:root{--bg:#f6f6f3;--card:#fff;--ink:#141414;--ink-2:#4b4b47;--muted:#7a7a74;--line:#e4e4de;--bar:#2f6b2f;--bar-soft:rgba(47,107,47,.12);color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root{--bg:#0b0b0c;--card:#151517;--ink:#f2f2ee;--ink-2:#c5c5bf;--muted:#8a8a84;--line:#27272a;--bar:#c6ff3d;--bar-soft:rgba(198,255,61,.13)}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1100px;margin:0 auto;padding:32px 16px 64px;display:grid;gap:20px}
+h1{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.1;margin:0;letter-spacing:-.02em}
+h2{font-size:1.05rem;margin:0 0 12px}
+p{margin:0}
+.sub{color:var(--ink-2)}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
+.seg button{border:0;background:none;color:var(--ink-2);font:inherit;font-size:.92rem;min-height:36px;padding:0 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;min-width:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px}
+.kpi{display:grid;gap:6px}
+.kpi b{font-size:clamp(1.8rem,4vw,2.3rem);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--ink-2);font-size:.92rem}
+.kpi small{color:var(--muted);font-size:.82rem}
+.chart{display:flex;align-items:flex-end;gap:3px;height:160px}
+.chart span{flex:1 1 0;height:100%;display:flex;align-items:flex-end}
+.chart i{display:block;width:100%;height:var(--h);min-height:2px;border-radius:3px 3px 1px 1px;background:var(--bar)}
+.chart .zero i{background:var(--line)}
+.axis{display:flex;justify-content:space-between;color:var(--muted);font-size:.8rem;margin-top:8px}
+.lists{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;align-items:start}
+ul{list-style:none;margin:0;padding:0;display:grid;gap:3px}
+li{position:relative;isolation:isolate;display:flex;gap:12px;align-items:baseline;padding:7px 10px;border-radius:8px}
+li::before{content:"";position:absolute;inset:0;width:var(--w,0);background:var(--bar-soft);border-radius:8px;z-index:-1}
+li .k{flex:1;min-width:0;overflow-wrap:anywhere}
+li .x{color:var(--muted);font-size:.85rem;white-space:nowrap}
+li .n{font-weight:600;font-variant-numeric:tabular-nums}
+.none{color:var(--muted);font-size:.92rem}
+form{display:grid;gap:10px;max-width:420px}
+input{font:inherit;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.btn{font:inherit;font-weight:600;min-height:44px;padding:0 18px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
+.link{font:inherit;font-size:.9rem;background:none;border:0;color:var(--ink-2);text-decoration:underline;cursor:pointer;padding:0}
+.err{color:#d2453a;min-height:1.4em;font-size:.9rem}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <div><h1 id="title">Visits</h1><p class="sub" id="sum"></p></div>
+  <form id="login" hidden>
+    <label for="token" id="tokenLabel">Dashboard key (STATS_TOKEN)</label>
+    <input id="token" type="password" autocomplete="current-password" required>
+    <p class="err" id="err" role="alert"></p>
+    <button class="btn" type="submit" id="open">Open</button>
+  </form>
+  <div id="board" hidden style="display:grid;gap:20px">
+    <div class="bar">
+      <div class="seg" role="group" id="range">
+        <button type="button" data-days="7" aria-pressed="false">7</button>
+        <button type="button" data-days="30" aria-pressed="true">30</button>
+        <button type="button" data-days="365" aria-pressed="false">365</button>
+      </div>
+      <button class="link" type="button" id="forget">Forget the key on this device</button>
+    </div>
+    <section class="kpis" id="kpis"></section>
+    <section class="card"><h2 id="chartTitle"></h2><div class="chart" id="chart" role="img"></div><div class="axis" id="axis"></div></section>
+    <div class="lists" id="lists"></div>
+    <p class="sub" id="help"></p>
+  </div>
+</main>
+<script src="dashboard.js"></script>
+</body>
+</html>
